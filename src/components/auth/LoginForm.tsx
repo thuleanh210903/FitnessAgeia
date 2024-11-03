@@ -1,16 +1,39 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Button from "../Button";
 import Link from "next/link";
 import Input from "@/components/Input";
 
 const LoginForm = () => {
+  const [value, setValue] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleSubmit = async (event: {preventDefault: () => void}) => {
+    // ngăn chặn việc tải lại trang
+    event.preventDefault();
+    console.log(value.email);
+    console.log(value.password)
+  }
+
+ 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div>
         <div>
-          <Input type="email" placeholder="Email" name="email" />
-          <Input type="password" placeholder="Password" name="password" />
+          <Input
+            type="email"
+            placeholder="Email"
+            name="email"
+            onChange={(e) => setValue({ ...value, email: e.target.value })}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            name="password"
+            onChange={(e) => setValue({ ...value, password: e.target.value })}
+          />
         </div>
 
         <div className="mb-5">
@@ -22,7 +45,6 @@ const LoginForm = () => {
                 id="remember"
                 className="border-black mr-1"
               />
-            
               Remember me
             </label>
 
@@ -34,7 +56,7 @@ const LoginForm = () => {
             </Link>
           </div>
         </div>
-        <Button className="w-full">Log in</Button>
+        <Button type = "submit" className="w-full">Log in</Button>
       </div>
     </form>
   );
