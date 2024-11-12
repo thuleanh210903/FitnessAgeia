@@ -8,7 +8,7 @@ import Link from "next/link";
 const Sidebar = () => {
   const [expand, setExpand] = useState(true);
   return (
-    <aside className={`h-screen transition-all ${expand ? "w-80" : "w-12"}`}>
+    <aside className={`h-screen transition-all ${expand ? "w-80" : "w-20"}`}>
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center relative">
           <img
@@ -21,7 +21,7 @@ const Sidebar = () => {
           <Image
             alt="control"
             src={control}
-            className={`absolute cursor-pointer -right-3 rounded-full top-9 w-7 border-2 border-black ${
+            className={`absolute cursor-pointer -right-3 rounded-full top-9 w-7 border-2 border-black z-50 ${
               !expand && "rotate-180"
             }`}
             onClick={() => setExpand(!expand)}
