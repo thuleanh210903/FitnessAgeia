@@ -10,13 +10,15 @@ import Cookies from "js-cookie";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     try {
+      if(!email.trim()|| !password.trim()) {
+        alert("Vui long nhap day du thong tin");
+      }
       const response = await login(email, password);
       const accessToken = response.data.accessToken
       Cookies.set('token', accessToken, {expires: 7})
