@@ -1,46 +1,39 @@
-import React, { ChangeEvent, FC } from "react";
+import { FieldError } from "react-hook-form";
 
-interface InputProps {
-  type: "text" | "number" | "email" | "password";
-  label?: string;
-  name?: string;
-  placeholder: string;
-  error?: boolean;
-  disabled?: boolean;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-}
+type InputFieldProps = {
+  label: string;
+  type?: string;
+  register: any;
+  name: string;
+  defaultValue?: string;
+  error?: FieldError;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+};
 
-const Input: FC<InputProps> = ({
-  type,
+const InputField = ({
   label,
+  type = "text",
+  register,
   name,
-  placeholder,
+  defaultValue,
   error,
-  disabled,
-  onChange,
-}) => {
+  inputProps,
+}: InputFieldProps) => {
   return (
-    <div className="mt-6 flex flex-col">
-      <label className="text-md font-semibold text-gray-700 mb-2">{label}</label>
+    <div className="flex flex-col gap-2 w-full md:w-1/4">
+      <label className="text-xs text-gray-500">{label}</label>
       <input
         type={type}
-        placeholder={placeholder}
-        name={name}
-        disabled={disabled}
-        onChange={onChange}
-        className={`text-base border rounded-lg px-4 py-2 transition duration-200 ease-in-out 
-                    ${
-                      error
-                        ? "border-red-500 bg-red-50 focus:border-red-500"
-                        : "border-gray-300 bg-gray-100 focus:border-blue-500"
-                    } focus:outline-none focus:ring-2 focus:ring-blue-200 
-                    ${disabled ? "bg-gray-200 cursor-not-allowed" : "bg-white"}`}
+        {...register(name)}
+        className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+        {...inputProps}
+        defaultValue={defaultValue}
       />
-      {error && (
-        <p className="text-red-500 text-sm font-medium mt-1">This field can't be empty</p>
+      {error?.message && (
+        <p className="text-xs text-red-400">{error.message.toString()}</p>
       )}
     </div>
   );
 };
 
-export default Input;
+export default InputField;
