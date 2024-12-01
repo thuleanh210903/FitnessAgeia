@@ -11,32 +11,32 @@ export const menuItems = [
       {
         icon: categories,
         label: "Categories",
-        href: "/categories",
+        href: "/dashboard/categories",
       },
       {
         icon: walking,
         label: "Exercise",
-        href: "/exercises",
+        href: "/dashboard/exercises",
       },
       {
         icon: goal,
         label: "Goal",
-        href: "/goals",
+        href: "/dashboard/goals",
       },
       {
         icon: workout,
         label: "Workout schedule",
-        href: "/workouts",
+        href: "/dashboard/workouts",
       },
       {
         icon: profile,
         label: "Users",
-        href: "/users",
+        href: "/dashboard/users",
       },
       {
         icon: profile,
         label: "Trainer",
-        href: "/trainers",
+        href: "/dashboard/trainers",
       },
     ],
   },
