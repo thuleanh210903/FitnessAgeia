@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import Table from "@/components/Table";
@@ -8,7 +7,15 @@ import view from "@/assets/icons/view.png";
 import deleteIcon from "@/assets/icons/delete.png";
 import Search from "@/components/Search";
 import { CategoryColumn } from "@/constants/Table/CategoryColumn";
-import plus from "@/assets/icons/plus.svg";
+import Button from "@/components/Button";
+import Modal from "@/components/Modal";
+import Input from "@/components/Input";
+import {
+  fetchCategory,
+  deleteCategory,
+  insertCategory,
+} from "@/services/categoryService";
+
 interface Category {
   _id: string;
   name: string;
@@ -17,15 +24,23 @@ interface Category {
 
 const CategoryList = () => {
   const [categories, setCategories] = useState<Category[]>([]);
-
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
 
+  const [newCategory, setNewCategory] = useState({
+    name: "",
+    image: null as File | null,
+  });
+
+  // Replace individual states with one state object for the new category
+
+  // fetch categories
   useEffect(() => {
-    const fetchCategories = async () => {
+    const loadCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:40001/category");
-        setCategories(response.data.data);
+        const response = await fetchCategory();
+        setCategories(response);
         setLoading(false);
       } catch (err) {
         setError("Không thể tải danh mục");
@@ -33,19 +48,10 @@ const CategoryList = () => {
       }
     };
 
-    fetchCategories();
+    loadCategories();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   const renderRow = (item: Category) => {
-
     return (
       <tr
         key={item._id}
@@ -80,21 +86,41 @@ const CategoryList = () => {
     );
   };
 
+  // handle adding new category
+  const handleAddCategory = async () => {
+    if (!newCategory.name || !newCategory.image) {
+      setError("Vui long nhap ten va hinh anh");
+      return;
+    }
+
+    try {
+      const addedCategory = await insertCategory({
+        name: newCategory.name,
+        image: newCategory.image as File,
+      });
+
+      setCategories((prevCategories) => [...prevCategories, addedCategory]);
+      setModalOpen(false);
+      setNewCategory({ name: "", image: null });
+    } catch (error) {
+      console.error("Không thể thêm danh mục:", error);
+      setError("Không thể thêm danh mục");
+    }
+  };
+
+  // delete category
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
       "Bạn có chắc chắn muốn xóa danh mục này?"
     );
-
-
     if (confirmDelete) {
       try {
-        // Gửi yêu cầu xóa đến API
-        await axios.delete(`http://localhost:40001/category/${id}`);
-        console.log(id)
-        // Cập nhật lại danh sách categories sau khi xóa
-        setCategories(prevCategories => prevCategories.filter(category => category._id !== id));
+        await deleteCategory(id);
+        setCategories((prevCategories) =>
+          prevCategories.filter((category) => category._id !== id)
+        );
       } catch (error) {
-        console.error("Lỗi khi xóa danh mục:", error);
+        console.error(error);
         setError("Không thể xóa danh mục");
       }
     }
@@ -108,15 +134,60 @@ const CategoryList = () => {
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <Search />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src={plus} alt="" width={30} height={30} />
-            </button>
+            <Button
+              className="w-8 h-8 flex items-center justify-center text-white text-2xl bg-blue-400"
+              onClick={() => setModalOpen(true)}
+            >
+              {/* <Image src={plus} alt="" width={30} height={30} /> */}+
+            </Button>
           </div>
         </div>
       </div>
       {/* LIST */}
       <Table columns={CategoryColumn} renderRow={renderRow} data={categories} />
       {/* PAGINATION */}
+
+      {/* MODAL */}
+      {isModalOpen && (
+        <Modal
+          title="Add new category"
+          isOpen={isModalOpen}
+          onClose={() => setModalOpen(false)}
+        >
+          <div className="space-y-4">
+            <div>
+              <Input
+                type="text"
+                label="Tên danh mục"
+                name="name"
+                placeholder="Nhập tên danh mục"
+                value={newCategory.name}
+                onChange={(e) =>
+                  setNewCategory((prev) => ({ ...prev, name: e.target.value }))
+                }
+              />
+              <Input
+                type="file"
+                label="Hình ảnh"
+                name="file"
+                placeholder="Nhập đường dẫn hình ảnh"
+                onChange={(e) =>
+                  setNewCategory((prev) => ({
+                    ...prev,
+                    image: e.target.files ? e.target.files[0] : null,
+                  }))
+                }
+              />
+              <Button
+                className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                onClick={handleAddCategory}
+              >
+                Insert
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
