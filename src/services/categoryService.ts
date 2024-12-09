@@ -46,3 +46,7 @@ export const insertCategory = async (category: {
     throw err;
   }
 };
+
+export const getCategoryById = async(id: string): Promise<void> => {
+  console.log(id)
+}

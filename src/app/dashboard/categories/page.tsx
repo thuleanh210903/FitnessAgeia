@@ -15,6 +15,8 @@ import {
   deleteCategory,
   insertCategory,
 } from "@/services/categoryService";
+import IconButton from "@/components/IconButton";
+import { UpdateModal } from "./[id]/page";
 
 interface Category {
   _id: string;
@@ -27,13 +29,20 @@ const CategoryList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false)
+  const [currentCategoryId, setCurrentCategoryId] = useState<string | null>(null);
 
   const [newCategory, setNewCategory] = useState({
     name: "",
     image: null as File | null,
   });
 
-  // Replace individual states with one state object for the new category
+  const openUpdateModal = (id: string) => {
+    console.log(id)
+    setCurrentCategoryId(id)
+    setUpdateModalOpen(true)
+  }
+
 
   // fetch categories
   useEffect(() => {
@@ -69,17 +78,20 @@ const CategoryList = () => {
         <td className="table-cell">{item.name}</td>
         <td>
           <div className="flex items-center gap-2">
-            <Link href={`/list/teachers/${item._id}`}>
-              <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky">
+            <Link href="">
+              <IconButton className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky" onClick={() => openUpdateModal(item._id)}>
                 <Image src={view} alt="" width={20} height={20} />
-              </button>
+              </IconButton>
             </Link>
-            <button
-              className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple"
-              onClick={() => handleDelete(item._id)}
-            >
-              <Image src={deleteIcon} alt="" width={20} height={20} />
-            </button>
+
+            <Link href="#">
+              <IconButton
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple"
+                onClick={() => handleDelete(item._id)}
+              >
+                <Image src={deleteIcon} alt="" width={20} height={20} />
+              </IconButton>
+            </Link>
           </div>
         </td>
       </tr>
@@ -187,6 +199,18 @@ const CategoryList = () => {
             </div>
           </div>
         </Modal>
+      )}
+
+
+      {/* UPDATE MODAL   */}
+
+      {isUpdateModalOpen && currentCategoryId && (
+        <UpdateModal
+        id={currentCategoryId}
+        onClose = {() => setUpdateModalOpen(false)}
+        >
+
+        </UpdateModal>
       )}
     </div>
   );
