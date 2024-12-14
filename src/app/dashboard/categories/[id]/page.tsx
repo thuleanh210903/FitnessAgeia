@@ -10,7 +10,9 @@ interface UpdateCategoryProps {
   onClose: () => void;
 }
 
+
 export const UpdateModal: React.FC<UpdateCategoryProps> = ({ id, onClose }) => {
+
   const [category, setCategory] = useState<{ name: string; image: string }>({
     name: "",
     image: "",
@@ -21,12 +23,14 @@ export const UpdateModal: React.FC<UpdateCategoryProps> = ({ id, onClose }) => {
   const fetchCategoryById = async() => {
     try {
         const category = await getCategoryById(id)
-        console.log(category)
+        console.log("Category"+ category)
 
     }catch(err) {
         throw err
     }
   }
+
+  fetchCategoryById()
 
   const handleUpdate = () => {};
 

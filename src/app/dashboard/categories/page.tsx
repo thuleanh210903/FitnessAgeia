@@ -38,7 +38,6 @@ const CategoryList = () => {
   });
 
   const openUpdateModal = (id: string) => {
-    console.log(id)
     setCurrentCategoryId(id)
     setUpdateModalOpen(true)
   }

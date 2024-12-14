@@ -48,5 +48,11 @@ export const insertCategory = async (category: {
 };
 
 export const getCategoryById = async(id: string): Promise<void> => {
-  console.log(id)
+  try {
+    const response = await axios.get(`${API_URL}/category/${id}`);
+    console.log(response)
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
 }
