@@ -1,39 +1,51 @@
-import { FieldError } from "react-hook-form";
+import React, { ChangeEvent, FC } from "react";
 
-type InputFieldProps = {
-  label: string;
-  type?: string;
-  register: any;
-  name: string;
-  defaultValue?: string;
-  error?: FieldError;
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
-};
+interface InputProps {
+  type: "text" | "number" | "email" | "password" | "file";
+  label?: string;
+  name?: string;
+  placeholder: string;
+  error?: boolean;
+  disabled?: boolean;
+  value?: string;
+  className?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+}
 
-const InputField = ({
+const Input: FC<InputProps> = ({
+  type,
   label,
-  type = "text",
-  register,
   name,
-  defaultValue,
+  placeholder,
   error,
-  inputProps,
-}: InputFieldProps) => {
+  disabled,
+  value,
+  className,
+  onChange,
+}) => {
   return (
-    <div className="flex flex-col gap-2 w-full md:w-1/4">
-      <label className="text-xs text-gray-500">{label}</label>
+    <div className="mt-6 flex flex-col">
+      <label className="text-md font-semibold text-gray-700 mb-2">{label}</label>
       <input
         type={type}
-        {...register(name)}
-        className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-        {...inputProps}
-        defaultValue={defaultValue}
+        placeholder={placeholder}
+        name={name}
+        disabled={disabled}
+        onChange={onChange}
+        value={value}
+        className={`text-base border rounded-lg px-4 py-2 transition duration-200 ease-in-out 
+                    ${
+                      error
+                        ? "border-red-500 bg-red-50 focus:border-red-500"
+                        : "border-gray-300 bg-gray-100 focus:border-blue-500"
+                    } focus:outline-none focus:ring-2 focus:ring-blue-200 
+                    ${disabled ? "bg-gray-200 cursor-not-allowed" : "bg-white"}`}
       />
-      {error?.message && (
-        <p className="text-xs text-red-400">{error.message.toString()}</p>
+      {error && (
+        <p className="text-red-500 text-sm font-medium mt-1">This field can't be empty</p>
       )}
     </div>
   );
 };
 
-export default InputField;
+export default Input;
