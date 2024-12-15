@@ -47,12 +47,32 @@ export const insertCategory = async (category: {
   }
 };
 
-export const getCategoryById = async(id: string): Promise<void> => {
-  try {
-    const response = await axios.get(`${API_URL}/category/${id}`);
-    console.log(response)
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
+
+interface Category {
+  name: string;
+  image: string;
 }
+
+export const getCategoryById = async (id: string): Promise<Category> => {
+  try {
+    const response = await axios.get(`${API_URL}/category/detail/${id}`);
+    return response.data.data; 
+  } catch (err) {
+    console.error(err);
+    throw new Error("Failed to fetch category data.");
+  }
+};
+
+
+export const updateCategory = async (id: string, data: FormData) => {
+  try {
+    const response = await axios.patch(`${API_URL}/category/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to update category");
+  }
+};

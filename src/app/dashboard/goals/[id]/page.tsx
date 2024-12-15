@@ -17,7 +17,6 @@ interface Goal {
 
 export const UpdateModal: React.FC<UpdateGoalProps> = ({ id, onClose }) => {
 
-    console.log(id)
   const [goal, setGoal] = useState<{ title: string; image: string }>({
     title: "",
     image: "",
@@ -29,7 +28,7 @@ export const UpdateModal: React.FC<UpdateGoalProps> = ({ id, onClose }) => {
   // Fetch goal data by ID
   const fetchGoalById = async () => {
     try {
-      const response = await getGoalById(id); // Assumes the API returns an object with title and image
+      const response = await getGoalById(id);
       setGoal(response);
     } catch (err) {
       setError("Failed to load goal data. Please try again.");
