@@ -7,7 +7,7 @@ interface InputProps {
   placeholder?: string;
   error?: boolean;
   disabled?: boolean;
-  value?: string;
+  value?: string | number;
   className?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }

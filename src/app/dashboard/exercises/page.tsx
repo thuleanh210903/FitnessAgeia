@@ -34,9 +34,7 @@ interface Exercise {
   category: Category | null;
 }
 
-interface JwtPayload {
-  email: string;
-}
+
 const Exercise = () => {
   const [exercise, setExercise] = useState<Exercise[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -84,15 +82,13 @@ const Exercise = () => {
     loadCategories();
   }, []);
 
-  useEffect(() => {
-    const token = Cookies.get("token");
-  }, []);
 
   // Xử lý thêm bài tập mới
   const handleAddExercise = async () => {
     if (!newExercise.name || !newExercise.steps || !newExercise.category) {
       return;
     }
+    console.log(newExercise)
 
     try {
       const addedExercsie = await addExercise({
