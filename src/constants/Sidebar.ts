@@ -31,7 +31,7 @@ export const menuItems = [
       {
         icon: profile,
         label: "Users",
-        href: "/dashboard/users",
+        href: "/dashboard/user",
       },
       {
         icon: profile,
