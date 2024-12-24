@@ -34,7 +34,7 @@ export const insertCategory = async (category: {
 
     formData.append("name", category.name);
 
-      formData.append("file", category.image);
+    formData.append("file", category.image);
 
     const response = await axios.post(`${API_URL}/category`, formData, {
       headers: {

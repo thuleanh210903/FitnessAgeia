@@ -54,6 +54,7 @@ const Goal = () => {
 
   //handle add new goal
   const handleAddGoal = async () => {
+    console.log(newGoal)
     if (!newGoal.title || !newGoal.image) {
       return;
     }
